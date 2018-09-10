@@ -19,7 +19,7 @@ import smtplib
 #Otwórz strone LUX MED
 driver = webdriver.Firefox()
 driver.get("https://portalpacjenta.luxmed.pl")
-
+time.sleep(5)
 try:
     myElem = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, 'Login')))
     print("Driver gotowy, strona otwarta!")
@@ -37,13 +37,13 @@ def send_email(FROM, TO, SUBJECT, TEXT):
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
     server.starttls()
-    server.login(get_credentials(login)[0], get_credentials(login)[1])
+    server.login(get_credentials('login')[0], get_credentials('login')[1])
     server.sendmail(FROM, TO, message)
     server.close()
     print('\nEmail został wysłany.')
 
 def get_credentials(file_name):
-    f = open('login', 'r')
+    f = open(file_name, 'r')
     x = f.read().split('\n')
     f.close()
     return x
@@ -51,10 +51,10 @@ def get_credentials(file_name):
 #Zaloguj się do systemu
 login = driver.find_element_by_name("Login")
 login.clear()
-login.send_keys(get_credentials(login)[2])
+login.send_keys(get_credentials('login')[2])
 pswrd = driver.find_element_by_id("TempPassword")
 pswrd.clear()
-driver.execute_script(str.format("document.getElementById('Password').value='{0}';",get_credentials(login)[3]))
+driver.execute_script(str.format("document.getElementById('Password').value='{0}';",get_credentials('login')[3]))
 driver.find_element_by_class_name("button.large.green").click()
 
 #Po drodze będzie pytanie o aktualizacje danych
